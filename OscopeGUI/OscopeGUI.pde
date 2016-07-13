@@ -11,7 +11,9 @@ import processing.serial.*;
 import java.lang.Math;
 
 ControlP5 cp5;
-
+int padding = 20;
+int numVertDivisions = 10;
+int numHorDivisions = 10;
 float vertPos, horPos;
 int timeDiv, voltsDiv;
 float vVal, hVal, vcVal;
@@ -40,10 +42,10 @@ int val;      // Data received from the serial port
 int[] buff = new int[buffLength];
 int[] windowBuff = new int[windowLength];
 
-void setup() {
 
+void setup() {
   size(1900, 950); //size of window
-  frame.setResizable(true);
+  surface.setResizable(true);
   cp5 = new ControlP5(this); //controll object
 
   cp5.addSlider("vertPos") //vertPos slider
@@ -476,7 +478,17 @@ public void Tcursor2(boolean flag) {
 void draw() {
 
   background(120); //light grey backgroung
-
+  
+  //vertPos slider
+  cp5.getController("vertPos").setPosition((width/1.5)+(2*padding), padding);
+  cp5.getController("vertPos").setSize(20, height-(2*padding));
+  cp5.getController("vertPos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
+  
+  //trigger slider
+  cp5.getController("trigger").setPosition((width/1.5)+(3*padding)+20, padding);
+  cp5.getController("trigger").setSize(20, height-(2*padding));
+  cp5.getController("trigger").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
+  
   strokeWeight(1);
   stroke(0);
   fill(200);
@@ -536,37 +548,35 @@ void draw() {
 
   //draw screen in colors of sliders
   fill(128, 150, 140);
-  rect(25, 25, 1200, 900, 7);
+  rect(padding, padding, round(width/1.5), height-(2*padding), 7);
 
   //black axes 
   stroke(0);
   strokeWeight(1.5);
-  line(25, 475, 1225, 475); // x-axis
-  line(625, 25, 625, 925); // y-axis
+  line(padding, height/2, padding+(width/1.5), height/2); // x-axis
+  line(round((width/1.5)/2)+padding, padding, ((width/1.5)/2)+padding, height-padding); // y-axis
 
   //grey gridlines
   stroke(100);
   strokeWeight(1);
-  line(25, 137.5, 1225, 137.5);
-  line(25, 250, 1225, 250);
-  line(25, 362.5, 1225, 362.5);
-  line(25, 587.5, 1225, 587.5);
-  line(25, 700, 1225, 700);
-  line(25, 812.5, 1225, 812.5);
-
-  line(145, 25, 145, 925);
-  line(265, 25, 265, 925);
-  line(385, 25, 385, 925);
-  line(505, 25, 505, 925);
-  line(745, 25, 745, 925);
-  line(865, 25, 865, 925);
-  line(985, 25, 985, 925);
-  line(1105, 25, 1105, 925);
+  int gridHeight = height-(2*padding);
+  int gridWidth = round(width/1.5);
+  
+  for(int i=1; i<numHorDivisions; i++){
+    if(i!=numHorDivisions/2){
+      line(padding, i*(gridHeight/numHorDivisions)+padding, (width/1.5)+padding, i*(gridHeight/numHorDivisions)+padding);
+    }
+  }
+  for(int i=1; i<numVertDivisions; i++){
+    if(i!=numVertDivisions/2){
+      line(i*(gridWidth/numVertDivisions)+padding, padding, i*(gridWidth/numVertDivisions)+padding, height-padding);
+    }
+  }
 
   //black trigger line
   stroke(0);
   strokeWeight(1.5);
-  line(25, trigger_p, 1225, trigger_p); //draws trigger line at vert position of trigger
+  line(padding, trigger_p, round(width/1.5)+padding, trigger_p); //draws trigger line at vert position of trigger
 
   stroke(245, 245, 40); //bright yellow for cursor lines
   textFont(f, 18);
