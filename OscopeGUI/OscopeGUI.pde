@@ -1,9 +1,10 @@
-
 /*
-Osilliscope GUI
- ECE 258
- Spring 2015
- David Kaplan & Bradley Natarian
+OscopeGUI
+A GUI for an arduino based oscilloscope.
+
+Based on the code written by David Kaplan and
+Bradley Natarian for the ECE 258 senior design
+course at Lehigh University in Spring 2015.
  */
 
 import controlP5.*;
@@ -44,7 +45,7 @@ int[] windowBuff = new int[windowLength];
 
 
 void setup() {
-  size(1900, 950); //size of window
+  size(1300, 600); //size of window
   surface.setResizable(true);
   cp5 = new ControlP5(this); //controll object
 
@@ -71,7 +72,6 @@ void setup() {
   //sets label at top and no value
   cp5.getController("horPos").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
   cp5.getController("horPos").getValueLabel().setVisible(false); 
-
 
   cp5.addSlider("voltsDiv") //voltsDiv slider
       .setPosition(1360, 175)
@@ -207,28 +207,58 @@ void setup() {
   cp5.getController("Hslider2").getValueLabel().setVisible(false);
 
 
-  cp5.addToggle("Vmax", 1500, 390, 70, 20); //bang for zero the horPos
+  cp5.addToggle("Vmax") //bang for zero the horPos
+    .setPosition(1500, 390)
+    .setWidth(70)
+    .setHeight(20);
   cp5.getController("Vmax").getCaptionLabel().align(ControlP5.CENTER, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);  
-  cp5.addToggle("Vmin", 1500, 430, 70, 20); //bang for zero the horPos
+  cp5.addToggle("Vmin")
+    .setPosition(1500, 430)
+    .setWidth(70)
+    .setHeight(20); //bang for zero the horPos
   cp5.getController("Vmin").getCaptionLabel().align(ControlP5.CENTER, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.addToggle("Vpp", 1630, 390, 70, 20); //bang for zero the horPos
+  cp5.addToggle("Vpp")
+    .setPosition(1630, 390)
+    .setWidth(70)
+    .setHeight(20); //bang for zero the horPos
   cp5.getController("Vpp").getCaptionLabel().align(ControlP5.CENTER, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.addToggle("Vave", 1630, 430, 70, 20); //bang for zero the horPos
+  cp5.addToggle("Vave")
+    .setPosition(1630, 430)
+    .setWidth(70)
+    .setHeight(20); //bang for zero the horPos
   cp5.getController("Vave").getCaptionLabel().align(ControlP5.CENTER, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.addToggle("Freq", 1760, 390, 70, 20); //bang for zero the horPos
+  cp5.addToggle("Freq")
+    .setPosition(1760, 390)
+    .setWidth(70)
+    .setHeight(20); //bang for zero the horPos
   cp5.getController("Freq").getCaptionLabel().align(ControlP5.CENTER, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.addToggle("Period", 1760, 430, 70, 20); //bang for zero the horPos
+  cp5.addToggle("Period")
+    .setPosition(1760, 430)
+    .setWidth(70)
+    .setHeight(20); //bang for zero the horPos
   cp5.getController("Period").getCaptionLabel().align(ControlP5.CENTER, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
 
-  cp5.addBang("ZeroH", 1360, 52, 25, 25); //bang for zero the horPos
+  cp5.addBang("ZeroH")
+    .setPosition(1360, 52)
+    .setWidth(25)
+    .setHeight(25); //bang for zero the horPos
 
-  cp5.addBang("ZeroV", 1360, 330, 25, 25); //bang for zero the vertPos
+  cp5.addBang("ZeroV")
+    .setPosition(1360, 330)
+    .setWidth(25)
+    .setHeight(25); //bang for zero the vertPos
   cp5.getController("ZeroV").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0); //lable at top
 
-  cp5.addBang("Reset_Trig", 1360, 270, 25, 25);//bang for trigger reset
+  cp5.addBang("Reset_Trig")
+    .setPosition(1360, 270)
+    .setWidth(25)
+    .setHeight(25);//bang for trigger reset
   cp5.getController("Reset_Trig").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0); //label at top
   
-  cp5.addBang("Auto_Scale", 1490, 800, 140, 40);//bang for trigger reset
+  cp5.addBang("Auto_Scale")
+    .setPosition(1490, 800)
+    .setWidth(140)
+    .setHeight(40);//bang for trigger reset
   cp5.getController("Auto_Scale").getCaptionLabel().setVisible(false);
 
   f = createFont("Arial", 16, true); //creates font class
@@ -476,7 +506,7 @@ public void Tcursor2(boolean flag) {
 }
 
 void draw() {
-
+  //println("Height" + height + " Width: " + width);
   background(120); //light grey backgroung
   
   //vertPos slider
@@ -683,7 +713,6 @@ void draw() {
   if ((SC == true) && (triggered == true) ){
           cp5.getController("Stop_Run").setValue(1);
     }
-  
   //println(windowOffset);
   if (triggered == false) {
     for (int i=0; i<timeLength-1; i++)
@@ -820,7 +849,6 @@ void draw() {
   else{
     text("Freq not found", 1490,740);
   }
-  
 }
   
 if (Period == true) {
@@ -872,7 +900,6 @@ if (Period == true) {
     text("Period not found", 1490,770);
   }
 }
- 
 } //end draw
 
 void serialEvent(Serial port){
